@@ -52,7 +52,7 @@ class InsertCopyRight:
                 for _root, _dir, _files in os.walk(_path):
                     if self.data['ignore_path'] is not None:
                         for _ignore_path in self.data['ignore_path']:
-                            if (_ignore_path in _root) or (_ignore_path in _root + '/') or\
+                            if (_ignore_path in _root) or (_ignore_path in _root + '/') or \
                                     (_path == '.' and _ignore_path[-1] == '/' and './' + _ignore_path == _root + '/'):
                                 _value = True
                                 break
@@ -103,13 +103,9 @@ class InsertCopyRight:
         As all lines of copyright are matching, returns true value, indicating copyright exists
         '''
         try:
-            copyright_list = self.data['copyright_string'].split('\n')
-            for i in range(0, len(copyright_list) - 1):
-                if content[i] == copyright_list[i] + '\n':
-                    _value = True
-                else:
-                    return False
-            return True
+            copyright_list = set(v.strip() for v in self.data['copyright_string'].split('\n'))
+            contents = set(v.strip() for v in content)
+            return not contents.isdisjoint(copyright_list)
         except Exception as e:
             raise e
 
